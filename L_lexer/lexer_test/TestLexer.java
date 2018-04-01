@@ -138,6 +138,6 @@ public class TestLexer {
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Op_G");
 	}
-		System.out.println("Тесты успешно завершены.");
+		System.out.println("Test complete");
 	}
 }

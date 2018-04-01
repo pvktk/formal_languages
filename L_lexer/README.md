@@ -2,8 +2,8 @@
 Нужно чтобы было JRE и JDK (для сборки), а так же Bash. Тестировалось на Ubuntu.
 
 Если их нет, то для их установки можно выполнить скрипт
+
 ```
-chmod +x install_java.sh
 ./install_java.sh
 ```
 
@@ -11,7 +11,6 @@ chmod +x install_java.sh
 В репозитории всё находится в собранном виде, поэтому можно сразу запустить:
 
 ```
-chmod +x runLexer.sh
 ./runLexer.sh filename
 ``` 
 (filename -- имя файла с текстом)
@@ -28,14 +27,12 @@ chmod +x runLexer.sh
 ## Сборка
 
 ```
-chmod +x build.sh
 ./build.sh
 ```
 
 ## Запуск тестов
 
 ```
-chmod +x testLexer.sh
 ./testLexer.sh
 ```
 
