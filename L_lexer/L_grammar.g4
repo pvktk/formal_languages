@@ -33,7 +33,7 @@ Op_OR : '||';
 //Разделители
 Colon : '('|')'|';';
 
-COMMENTS : '//' (~('\n'|'\r'))* -> skip;
+COMMENT : '//' (~('\n'|'\r'))*;
 
 BoolLit : 'true' | 'false';
 

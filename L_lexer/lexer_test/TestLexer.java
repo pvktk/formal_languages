@@ -71,6 +71,10 @@ public class TestLexer {
 		assert t.getText().equals("128");
 		
 		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("COMMENT");
+		assert t.getText().equals("//true read 123");
+		
+		t = lexer.nextToken();
 		assert t.getCharPositionInLine() == 0;
 		assert voc.getSymbolicName(t.getType()).equals("Num");
 		assert t.getText().equals("0");
