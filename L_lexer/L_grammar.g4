@@ -1,5 +1,6 @@
 
 lexer grammar L_grammar;
+import L_numerals;
 
 @header {
 package lexer;
@@ -39,14 +40,6 @@ BoolLit : 'true' | 'false';
 Ident : [_a-zA-Z][_a-zA-Z0-9]* ;
 
 //Числа
-Num : Int|Float;
-Int : DecInt|HexInt|OctInt;
-DecInt : '0'|[1-9][0-9]*;
-HexInt : '0x'('0'|[1-9a-fA-F][0-9a-fA-F]*);
-OctInt : '0'[1-7][0-7];
-
-Float : DecFloat;
-DecFloat : [0-9]*'.'[0-9]*;
 
 //Пробельные символы
 WS : [ \t\r\n\f]+ -> skip ; // toss out whitespace

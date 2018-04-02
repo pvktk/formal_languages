@@ -77,14 +77,15 @@ public class TestLexer {
 		assert t.getLine() == 2;
 	}
 	{ //числа
-		L_grammar lexer = new L_grammar(CharStreams.fromString("071 081 1xf3 0x010 0x110 00 2.718281828"));
+		L_grammar lexer = new L_grammar(CharStreams.fromString(
+			"071 081 1xf3 0x010 0x110 00 2.718281828 -5 5. 3.14 .5 3.14e+25 1e10 1e-1"));
 		Vocabulary voc = lexer.getVocabulary();
 		Token t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Num");
 		assert t.getText().equals("071");
 		
 		t = lexer.nextToken();
-		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert voc.getSymbolicName(t.getType()).equals("Num") : voc.getSymbolicName(t.getType());
 		assert t.getText().equals("0");
 		
 		t = lexer.nextToken();
@@ -101,11 +102,7 @@ public class TestLexer {
 		
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Num");
-		assert t.getText().equals("0x0");
-		
-		t = lexer.nextToken();
-		assert voc.getSymbolicName(t.getType()).equals("Num");
-		assert t.getText().equals("10");
+		assert t.getText().equals("0x010") : t.getText();
 		
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Num");
@@ -113,15 +110,40 @@ public class TestLexer {
 		
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Num");
-		assert t.getText().equals("0") : t.getText();
-		
-		t = lexer.nextToken();
-		assert voc.getSymbolicName(t.getType()).equals("Num");
-		assert t.getText().equals("0");
+		assert t.getText().equals("00") : t.getText();
 		
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Num");
 		assert t.getText().equals("2.718281828");
+		
+		t = lexer.nextToken();
+		t=lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num") : voc.getSymbolicName(t.getType());
+		assert t.getText().equals("5");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals("5.");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals("3.14");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals(".5");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals("3.14e+25");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals("1e10");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Num");
+		assert t.getText().equals("1e-1");
 	}
 	{//парные операторы
 		L_grammar lexer = new L_grammar(CharStreams.fromString("== = >=>"));
