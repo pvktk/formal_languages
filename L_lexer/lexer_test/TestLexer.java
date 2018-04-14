@@ -64,7 +64,7 @@ public class TestLexer {
 		assert t.getText().equals("iffalse");
 	}
 	{ //комментарии
-		L_grammar lexer = new L_grammar(CharStreams.fromString("128 //true read 123\n0"));
+		L_grammar lexer = new L_grammar(CharStreams.fromString("128 //true read 123\n0 /* abc\n /* def \n*/ /*//ab*/\n /**/"));
 		Vocabulary voc = lexer.getVocabulary();
 		Token t = lexer.nextToken();
 		assert t.getCharPositionInLine() == 0;
@@ -79,6 +79,18 @@ public class TestLexer {
 		assert voc.getSymbolicName(t.getType()).equals("Num");
 		assert t.getText().equals("0");
 		assert t.getLine() == 2;
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("MultilineComment");
+		assert t.getText().equals("/* abc\n /* def \n*/") : t.getText();
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("MultilineComment");
+		assert t.getText().equals("/*//ab*/");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("MultilineComment");
+		assert t.getText().equals("/**/");
 	}
 	{ //числа
 		L_grammar lexer = new L_grammar(CharStreams.fromString(
@@ -163,6 +175,24 @@ public class TestLexer {
 		
 		t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Op_G");
+	}
+	{// умножение и степень
+		L_grammar lexer = new L_grammar(CharStreams.fromString("a * b ** c"));
+		Vocabulary voc = lexer.getVocabulary();
+		
+		Token t = lexer.nextToken();
+		assert t.getText().equals("a");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Op_Mult");
+		assert t.getText().equals("*");
+		
+		t = lexer.nextToken();
+		assert t.getText().equals("b");
+		
+		t = lexer.nextToken();
+		assert voc.getSymbolicName(t.getType()).equals("Op_Power");
+		assert t.getText().equals("**");
 	}
 		System.out.println("Test complete");
 	}

@@ -17,6 +17,7 @@ KW_Write : 'write';
 //Операторы
 Op_Plus : '+';
 Op_Minus : '-';
+Op_Power : '**';
 Op_Mult : '*';
 Op_Div : '/';
 Op_Mod : '%';
@@ -33,6 +34,7 @@ Op_OR : '||';
 //Разделители
 Colon : '('|')'|';';
 
+MultilineComment : '/*' .*? '*/';
 COMMENT : '//' (~('\n'|'\r'))*;
 
 BoolLit : 'true' | 'false';
@@ -42,4 +44,4 @@ Ident : [_a-zA-Z][_a-zA-Z0-9]* ;
 //Числа
 
 //Пробельные символы
-WS : [ \t\r\n\f]+ -> skip ; // toss out whitespace
+WS : [ \t\r\n\f]+ -> skip ;
