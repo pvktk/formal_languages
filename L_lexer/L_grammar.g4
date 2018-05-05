@@ -1,10 +1,17 @@
 
 lexer grammar L_grammar;
+
+//Числа
 import L_numerals;
 
 @header {
 package lexer;
 }
+
+channels {
+	COMMENTS
+}
+
 //Ключевые слова
 KW_If : 'if';
 KW_Then : 'then';
@@ -32,16 +39,20 @@ Op_AND : '&&';
 Op_OR : '||';
 
 //Разделители
-Colon : '('|')'|';';
+OpenBrace : '{';
+CloseBrace : '}';
+OpenParenth : '(';
+CloseParenth : ')';
+DotCom : ';';
+Comma : ',';
+Colon : OpenBrace | CloseBrace | OpenParenth | CloseParenth | DotCom | Comma;
 
-MultilineComment : '/*' .*? '*/';
-COMMENT : '//' (~('\n'|'\r'))*;
+MultilineComment : '/*' .*? '*/' ->channel(COMMENTS);
+COMMENT : '//' (~('\n'|'\r'))* ->channel(COMMENTS);
 
 BoolLit : 'true' | 'false';
 
 Ident : [_a-zA-Z][_a-zA-Z0-9]* ;
-
-//Числа
 
 //Пробельные символы
 WS : [ \t\r\n\f]+ -> skip ;

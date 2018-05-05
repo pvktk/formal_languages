@@ -21,7 +21,7 @@ public class TestLexer {
 		assert t.getCharPositionInLine() == 7;
 		
 		t = lexer.nextToken();
-		assert voc.getSymbolicName(t.getType()).equals("Colon") : voc.getSymbolicName(t.getType());
+		assert voc.getSymbolicName(t.getType()).equals("DotCom") : voc.getSymbolicName(t.getType());
 		assert t.getCharPositionInLine() == 13;
 		
 		t = lexer.nextToken();
