@@ -15,8 +15,9 @@
 ```
 
 ## Запуск
+### Лексер
 
-Для запуска на файле с именем filename выполните
+Для запуска лексера на файле с именем filename выполните
 
 ```
 ./runLexer.sh filename
@@ -31,7 +32,25 @@
 
 Код находится в файле ```lexer_runner/runLexer.java``` .
 
+### Парсер
+Для запуска парсера на файле с именем filename выполните
+
+```
+./runParser.sh filename
+``` 
+
+или без аргумента
+
+```
+./runParser.sh
+```
+тогда запустится на файле-примере.
+
+Код находится в файлах ```parser_runner/runParser.java``` , ```parser_runner/ASTBuildListener.java```.
+
 ## Запуск тестов
+
+### Лексер
 
 ```
 ./testLexer.sh
@@ -40,6 +59,16 @@
 Тесты находятся в файле ```lexer_test/TestLexer.java```.
 
 Сама грамматика в файле ```L_grammar.g4```
+
+### Парсер
+
+```
+./testParser.sh
+```
+
+Тесты находятся в файле ```parser_test/TestParser.java```.
+
+Сама грамматика в файле ```L_parser.g4```
 
 ## Конкретный синтаксис
 
