@@ -6,16 +6,6 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 public class runParser {
-	public static void treeTraverse(ParseTree t) {
-		int nChilds = t.getChildCount();
-		if (nChilds == 0) {
-			System.out.println(t.getParent().getText() + "--" + t.getText());
-		}
-		for (int i = 0; i < nChilds; i++) {
-			treeTraverse(t.getChild(i));
-		}
-	}
-	
 	public static void main(String[] args) throws IOException {
 		L_grammar lexer;
 		if (args.length == 0) {
@@ -26,9 +16,16 @@ public class runParser {
 		
 		L_parser parser = new L_parser(new CommonTokenStream(lexer));
 		
-		ASTBuildListener listener = new ASTBuildListener(System.out);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ASTBuildListener listener = new ASTBuildListener(new PrintStream(baos));
 		
 		ParseTreeWalker.DEFAULT.walk(listener, parser.program());
-		//treeTraverse(parser.expression());
+		
+		
+		if (parser.getNumberOfSyntaxErrors() > 0) {
+			System.out.println("Parse errors detected. No AST will be shown.");
+		} else {
+			System.out.print(baos);
+		}
 	}
 }

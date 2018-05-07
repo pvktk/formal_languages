@@ -4,7 +4,7 @@ options {
 	tokenVocab=L_grammar;
 	}
 
-program : funcDef* (operator DotCom)* EOF;
+program : funcDef* operator* EOF;
 //program : funcDef EOF;
 
 binop :
@@ -25,7 +25,7 @@ binop :
 	|Op_OR;
 
 
-funcDef : Ident OpenParenth (|Ident(Comma Ident)*) CloseParenth OpenBrace (operator DotCom)* CloseBrace;
+funcDef : Ident OpenParenth (|Ident(Comma Ident)*) CloseParenth OpenBrace operator* CloseBrace;
 
 funcCall : Ident OpenParenth (|expression(Comma expression)*) CloseParenth;
 
@@ -33,11 +33,12 @@ exprSimple : funcCall | Ident | Num | (OpenParenth expression CloseParenth);
 
 expression : exprSimple | (exprSimple binop expression);
 
-operator : (Ident Op_Equate expression)//# Equate
-	| OpenParenth operator CloseParenth// # ParenthOp
-	| funcCall //# functionCall
-	| KW_Write expression //#write
-	| KW_Read Ident //# read
-	| KW_While expression KW_Do operator //# WhileConstruct
+operator : 
+	Ident Op_Equate expression DotCom//# Equate
+	| OpenBrace operator* CloseBrace// # ParenthOp
+	| funcCall DotCom//# functionCall
+	| KW_Write expression DotCom//#write
+	| KW_Read Ident DotCom//# read
+	| KW_While expression KW_Do operator//# WhileConstruct
 	| KW_If expression KW_Then operator KW_Else operator; //# IfThenElse; 
 

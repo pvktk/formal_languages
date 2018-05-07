@@ -9,6 +9,9 @@ public class ASTBuildListener extends L_parserBaseListener {
 	public ASTBuildListener(PrintStream out) {
 		this.out = out;
 	}
+	
+	public static class ParseErrorException extends Exception {}
+	
 	private int margin = 0;
 	private void printInformation(ParserRuleContext ctx, String name) {
 		Token i = ctx.getStart();
@@ -106,10 +109,5 @@ public class ASTBuildListener extends L_parserBaseListener {
 	 */
 	@Override public void exitEveryRule(ParserRuleContext ctx) {
 		margin--;
-	}
-	
-	@Override public void visitErrorNode(ErrorNode node) {
-		out.println("Parsing error detected");
-		out.close();
 	}
 }
