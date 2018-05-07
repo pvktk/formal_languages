@@ -8,7 +8,8 @@ a :=1+2+4;
 
 write a;
 
-while 1 do (write x);
+while 1 do {write x;}
 
-if (1 == 2) then (write 1) else (read p);
+//if (1 == 2) then (write 1) else (read p);
 
+if (x == 5) then {{}} else {y := x-3;}
