@@ -162,7 +162,7 @@ public class TestLexer {
 		assert t.getText().equals("1e-1");
 	}
 	{//парные операторы
-		L_grammar lexer = new L_grammar(CharStreams.fromString("== = >=>"));
+		L_grammar lexer = new L_grammar(CharStreams.fromString("== := >=>"));
 		Vocabulary voc = lexer.getVocabulary();
 		Token t = lexer.nextToken();
 		assert voc.getSymbolicName(t.getType()).equals("Op_Eq");

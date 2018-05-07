@@ -15,13 +15,17 @@ public class ASTBuildListener extends L_parserBaseListener {
 		for (int j = 0; j < margin; j++) {
 			out.format("  ");
 		}
+		String text = i.getText();
+		if (text.equals("<EOF>")) {
+			text = "";
+		}
 		out.format("%s (\"%s\", %d, %d, %d)\n",
 			//voc.getSymbolicName(i.getType()),
 			name,
-			i.getText(),
+			text,
 			i.getLine() - 1,
 			i.getCharPositionInLine(),
-			i.getCharPositionInLine() + i.getText().length() - 1
+			i.getCharPositionInLine() + text.length() - 1
 		);
 	}
 	/**
@@ -102,5 +106,10 @@ public class ASTBuildListener extends L_parserBaseListener {
 	 */
 	@Override public void exitEveryRule(ParserRuleContext ctx) {
 		margin--;
+	}
+	
+	@Override public void visitErrorNode(ErrorNode node) {
+		out.println("Parsing error detected");
+		out.close();
 	}
 }

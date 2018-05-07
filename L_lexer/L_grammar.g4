@@ -28,7 +28,7 @@ Op_Power : '**';
 Op_Mult : '*';
 Op_Div : '/';
 Op_Mod : '%';
-Op_Equate : '=';
+Op_Equate : ':=';
 Op_Eq : '==';
 Op_Neq : '!=';
 Op_G : '>';

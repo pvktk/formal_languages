@@ -4,7 +4,7 @@ f(a,b,c){
 	); //comment
 }
 
-a=1+2+4;
+a :=1+2+4;
 
 write a;
 
