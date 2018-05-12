@@ -2,6 +2,8 @@ parser grammar L_parser;
 
 options {
 	tokenVocab=L_grammar;
+	//output=template;
+	//rewrite=true;
 	}
 
 program : funcDef* operator* EOF;
@@ -25,20 +27,25 @@ binop :
 	|Op_OR;
 
 
-funcDef : Ident OpenParenth (|Ident(Comma Ident)*) CloseParenth OpenBrace operator* CloseBrace;
+funcDef : Ident OpenParenth (|namedIdent(Comma namedIdent)*) CloseParenth operator;
 
 funcCall : Ident OpenParenth (|expression(Comma expression)*) CloseParenth;
 
-exprSimple : funcCall | Ident | Num | (OpenParenth expression CloseParenth);
+exprSimple : funcCall # exprS
+		| Ident # exprS
+		| Num # exprS
+		| OpenParenth expression CloseParenth # ParenthExpr;
 
 expression : exprSimple | (exprSimple binop expression);
 
+namedIdent : Ident;
+
 operator : 
-	Ident Op_Equate expression DotCom//# Equate
-	| OpenBrace operator* CloseBrace// # ParenthOp
-	| funcCall DotCom//# functionCall
-	| KW_Write expression DotCom//#write
-	| KW_Read Ident DotCom//# read
-	| KW_While expression KW_Do operator//# WhileConstruct
-	| KW_If expression KW_Then operator KW_Else operator; //# IfThenElse; 
+	namedIdent Op_Equate expression DotCom # Equate
+	| OpenBrace operator* CloseBrace # BraceOp
+	| funcCall DotCom # functionCall
+	| KW_Write expression DotCom #write
+	| KW_Read Ident DotCom # read
+	| KW_While expression KW_Do operator # WhileConstruct
+	| KW_If expression KW_Then operator KW_Else operator # IfThenElse; 
 

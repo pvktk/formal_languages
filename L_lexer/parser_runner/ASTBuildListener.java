@@ -3,41 +3,65 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import java.io.*;
+import java.util.*;
 
 public class ASTBuildListener extends L_parserBaseListener {
 	private PrintStream out;
 	public ASTBuildListener(PrintStream out) {
 		this.out = out;
+		stack = new Stack<>();
+		stack.push(-1);
 	}
 	
 	public static class ParseErrorException extends Exception {}
 	
-	private int margin = 0;
-	private void printInformation(ParserRuleContext ctx, String name) {
-		Token i = ctx.getStart();
-		for (int j = 0; j < margin; j++) {
-			out.format("  ");
+	private int margin = -1, currMargin = -1;
+	private Stack<Integer> stack;
+	
+	
+	private void printInformation(ParserRuleContext ctx, String name, String textLex) {
+
+		Token i = ctx.getStart(), k = ctx.getStop();
+		
+		while (margin < stack.peek()) {
+			stack.pop();
+			currMargin--;
 		}
-		String text = i.getText();
-		if (text.equals("<EOF>")) {
-			text = "";
+
+		if (margin > stack.peek()) {
+			currMargin++;
+			stack.push(margin);
 		}
-		out.format("%s (\"%s\", %d, %d, %d)\n",
+		
+		for (int j = 0; j < currMargin; j++) {
+			out.format("| ");
+		}
+		//String text = i.getText();
+		if (textLex.equals("<EOF>")) {
+			textLex = "";
+		}
+		out.format("%s (\"%s\", (%d, %d), (%d, %d) )\n",
 			//voc.getSymbolicName(i.getType()),
 			name,
-			text,
-			i.getLine() - 1,
+			textLex,
+			i.getLine(),
 			i.getCharPositionInLine(),
-			i.getCharPositionInLine() + text.length() - 1
+			k.getLine(),
+			k.getCharPositionInLine()
 		);
 	}
+	
+	private void printInformation(ParserRuleContext ctx, String name) {
+		printInformation(ctx, name, ctx.getStart().getText());
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterProgram(L_parser.ProgramContext ctx) {
-		printInformation(ctx, "Program");
+		printInformation(ctx, "Program", "All code");
 	}
 
 	/**
@@ -72,26 +96,44 @@ public class ASTBuildListener extends L_parserBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprSimple(L_parser.ExprSimpleContext ctx) {
-		//System.out.println("ExprSimple entered");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpression(L_parser.ExpressionContext ctx) {
+	@Override public void enterExprS(L_parser.ExprSContext ctx) {
 		printInformation(ctx, "Expression");
 	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperator(L_parser.OperatorContext ctx) {
-		printInformation(ctx, "Operator");
+	
+	@Override public void enterParenthExpr(L_parser.ParenthExprContext ctx) {
+		printInformation(ctx, "Expression", "()");
+	}
+	
+	@Override public void enterEquate(L_parser.EquateContext ctx) {
+		printInformation(ctx, "Operator", ":=");
+	}
+	
+	@Override public void enterNamedIdent(L_parser.NamedIdentContext ctx) {
+		printInformation(ctx, "Ident");
+	}
+	
+	@Override public void enterBraceOp(L_parser.BraceOpContext ctx) {
+		printInformation(ctx, "Operator", "{}");
+	}
+	
+	@Override public void enterFunctionCall(L_parser.FunctionCallContext ctx) {
+		printInformation(ctx, "Operator", "Function call");
+	}
+	
+	@Override public void enterWrite(L_parser.WriteContext ctx) {
+		printInformation(ctx, "Operator", "write");
+	}
+	
+	@Override public void enterRead(L_parser.ReadContext ctx) {
+		printInformation(ctx, "Operator", "read");
+	}
+	
+	@Override public void enterWhileConstruct(L_parser.WhileConstructContext ctx) {
+		printInformation(ctx, "Operator", "While Do");
+	}
+	
+	@Override public void enterIfThenElse(L_parser.IfThenElseContext ctx) {
+		printInformation(ctx, "Operator", "If Then Else");
 	}
 
 	/**
