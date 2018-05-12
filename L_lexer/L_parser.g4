@@ -26,7 +26,6 @@ binop :
 	|Op_AND
 	|Op_OR;
 
-
 funcDef : Ident OpenParenth (|namedIdent(Comma namedIdent)*) CloseParenth operator;
 
 funcCall : Ident OpenParenth (|expression(Comma expression)*) CloseParenth;
@@ -36,7 +35,11 @@ exprSimple : funcCall # exprS
 		| Num # exprS
 		| OpenParenth expression CloseParenth # ParenthExpr;
 
-expression : exprSimple | (exprSimple binop expression);
+expression : exprSimple | binopRoot;
+
+binopRoot : exprFictiveLayer binop expression;
+
+exprFictiveLayer : exprSimple;
 
 namedIdent : Ident;
 
@@ -45,7 +48,7 @@ operator :
 	| OpenBrace operator* CloseBrace # BraceOp
 	| funcCall DotCom # functionCall
 	| KW_Write expression DotCom #write
-	| KW_Read Ident DotCom # read
+	| KW_Read namedIdent DotCom # read
 	| KW_While expression KW_Do operator # WhileConstruct
 	| KW_If expression KW_Then operator KW_Else operator # IfThenElse; 
 

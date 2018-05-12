@@ -9,31 +9,18 @@ public class ASTBuildListener extends L_parserBaseListener {
 	private PrintStream out;
 	public ASTBuildListener(PrintStream out) {
 		this.out = out;
-		stack = new Stack<>();
-		stack.push(-1);
 	}
 	
 	public static class ParseErrorException extends Exception {}
 	
-	private int margin = -1, currMargin = -1;
-	private Stack<Integer> stack;
+	private int margin = -1;
 	
 	
 	private void printInformation(ParserRuleContext ctx, String name, String textLex) {
 
 		Token i = ctx.getStart(), k = ctx.getStop();
 		
-		while (margin < stack.peek()) {
-			stack.pop();
-			currMargin--;
-		}
-
-		if (margin > stack.peek()) {
-			currMargin++;
-			stack.push(margin);
-		}
-		
-		for (int j = 0; j < currMargin; j++) {
+		for (int j = 0; j < margin; j++) {
 			out.format("| ");
 		}
 		//String text = i.getText();
@@ -61,95 +48,102 @@ public class ASTBuildListener extends L_parserBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterProgram(L_parser.ProgramContext ctx) {
-		printInformation(ctx, "Program", "All code");
+		margin++;
+		out.println("Program");
+	}
+	
+	@Override public void exitProgram(L_parser.ProgramContext ctx) {
+		margin--;
+	}
+	
+	@Override public void enterBinopRoot(L_parser.BinopRootContext ctx) {
+		margin++;
+		printInformation(ctx, "Binary Op", ctx.getChild(1).getText());
+	}
+	
+	@Override public void exitBinopRoot(L_parser.BinopRootContext ctx) {
+		margin--;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBinop(L_parser.BinopContext ctx) {
-		printInformation(ctx, "Binary Op");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFuncDef(L_parser.FuncDefContext ctx) {
+		margin++;
 		printInformation(ctx, "Func Def");
 	}
+	
+	@Override public void exitFuncDef(L_parser.FuncDefContext ctx) {
+		margin--;
+	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFuncCall(L_parser.FuncCallContext ctx) {
+		margin++;
 		printInformation(ctx, "Func Call");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+	@Override public void exitFuncCall(L_parser.FuncCallContext ctx) {
+		margin--;
+	}
+	
+	
 	@Override public void enterExprS(L_parser.ExprSContext ctx) {
+		margin++;
 		printInformation(ctx, "Expression");
 	}
 	
-	@Override public void enterParenthExpr(L_parser.ParenthExprContext ctx) {
-		printInformation(ctx, "Expression", "()");
+	@Override public void exitExprS(L_parser.ExprSContext ctx) {
+		margin--;
 	}
 	
 	@Override public void enterEquate(L_parser.EquateContext ctx) {
+		margin++;
 		printInformation(ctx, "Operator", ":=");
 	}
 	
+	@Override public void exitEquate(L_parser.EquateContext ctx) {
+		margin--;
+	}
+	
 	@Override public void enterNamedIdent(L_parser.NamedIdentContext ctx) {
+		margin++;
 		printInformation(ctx, "Ident");
 	}
 	
-	@Override public void enterBraceOp(L_parser.BraceOpContext ctx) {
-		printInformation(ctx, "Operator", "{}");
-	}
-	
-	@Override public void enterFunctionCall(L_parser.FunctionCallContext ctx) {
-		printInformation(ctx, "Operator", "Function call");
+	@Override public void exitNamedIdent(L_parser.NamedIdentContext ctx) {
+		margin--;
 	}
 	
 	@Override public void enterWrite(L_parser.WriteContext ctx) {
+		margin++;
 		printInformation(ctx, "Operator", "write");
 	}
 	
+	@Override public void exitWrite(L_parser.WriteContext ctx) {
+		margin--;
+	}
+	
 	@Override public void enterRead(L_parser.ReadContext ctx) {
+		margin++;
 		printInformation(ctx, "Operator", "read");
 	}
 	
+	@Override public void exitRead(L_parser.ReadContext ctx) {
+		margin--;
+	}
+	
 	@Override public void enterWhileConstruct(L_parser.WhileConstructContext ctx) {
+		margin++;
 		printInformation(ctx, "Operator", "While Do");
 	}
 	
+	@Override public void exitWhileConstruct(L_parser.WhileConstructContext ctx) {
+		margin--;
+	}
+	
 	@Override public void enterIfThenElse(L_parser.IfThenElseContext ctx) {
+		margin++;
 		printInformation(ctx, "Operator", "If Then Else");
 	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEveryRule(ParserRuleContext ctx) {
-		margin++;
-	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEveryRule(ParserRuleContext ctx) {
+	
+	@Override public void exitIfThenElse(L_parser.IfThenElseContext ctx) {
 		margin--;
 	}
 }
