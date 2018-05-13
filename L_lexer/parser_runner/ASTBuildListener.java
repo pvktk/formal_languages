@@ -146,4 +146,67 @@ public class ASTBuildListener extends L_parserBaseListener {
 	@Override public void exitIfThenElse(L_parser.IfThenElseContext ctx) {
 		margin--;
 	}
+	
+	//sugar
+	
+	@Override public void enterIncrement(L_parser.IncrementContext ctx) {
+		margin++;
+		printInformation(ctx, "Increment", "++");
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIncrement(L_parser.IncrementContext ctx) {
+		margin--;
+	}
+	
+	
+	@Override public void enterDecrement(L_parser.DecrementContext ctx) {
+		margin++;
+		printInformation(ctx, "Decrement", "--");
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDecrement(L_parser.DecrementContext ctx) {
+		margin--;
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPlusEq(L_parser.PlusEqContext ctx) {
+		margin++;
+		printInformation(ctx, "Plus Eq", "+=");
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPlusEq(L_parser.PlusEqContext ctx) {
+		margin--;
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMinusEq(L_parser.MinusEqContext ctx) {
+		margin++;
+		printInformation(ctx, "Minus Eq", "-=");
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMinusEq(L_parser.MinusEqContext ctx) {
+		margin--;
+	}
 }

@@ -18,3 +18,7 @@ while 1 do {write x;}
 //if (1 == 2) then (write 1) else (read p);
 */
  if (x == 5) then {{f(1,2);}} else {y := x-34;}
+
+++s;
+
+g += 1+3;

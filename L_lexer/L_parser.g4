@@ -50,5 +50,10 @@ operator :
 	| KW_Write expression DotCom #write
 	| KW_Read namedIdent DotCom # read
 	| KW_While expression KW_Do operator # WhileConstruct
-	| KW_If expression KW_Then operator KW_Else operator # IfThenElse; 
+	| KW_If expression KW_Then operator KW_Else operator # IfThenElse
+	//sugar
+	| Op_Plus Op_Plus namedIdent DotCom # increment
+	| Op_Minus Op_Minus namedIdent DotCom # decrement
+	| namedIdent Op_Plus Op_Equ expression DotCom # plusEq
+	| namedIdent Op_Minus Op_Equ expression DotCom # minusEq;
 

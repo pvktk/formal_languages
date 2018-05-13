@@ -37,6 +37,7 @@ Op_L : '<';
 Op_LE : '<=';
 Op_AND : '&&';
 Op_OR : '||';
+Op_Equ : '=';
 
 //Разделители
 OpenBrace : '{';

@@ -9,25 +9,29 @@ public class TestParser {
 	public static void main(String[] args) {
 	{
 		String input = "\n" + 
-			"fn(a, b, c){\n" + 
-			"	f(1,2//\n" + 
-			"	); //comment\n" + 
-			"}\n" + 
-			"\n" + 
-			"fUnary(p1)\n" + 
-			"	read b;\n" + 
-			"\n" + 
-			"a :=1+2+4;\n" + 
-			"\n" + 
-			"write a;\n" + 
-			"\n" + 
-			"write (1 + x);\n" + 
-			"\n" + 
-			"while 1 do {write x;}\n" + 
-			"/*\n" + 
-			"//if (1 == 2) then (write 1) else (read p);\n" + 
-			"*/\n" + 
-			" if (x == 5) then {{f(1,2);}} else {y := x-34;}\n";
+				"fn(a, b, c){\n" + 
+				"	f(1,2//\n" + 
+				"	); //comment\n" + 
+				"}\n" + 
+				"\n" + 
+				"fUnary(p1)\n" + 
+				"	read b;\n" + 
+				"\n" + 
+				"a :=1+2+4;\n" + 
+				"\n" + 
+				"write a;\n" + 
+				"\n" + 
+				"write (1 + x);\n" + 
+				"\n" + 
+				"while 1 do {write x;}\n" + 
+				"/*\n" + 
+				"//if (1 == 2) then (write 1) else (read p);\n" + 
+				"*/\n" + 
+				" if (x == 5) then {{f(1,2);}} else {y := x-34;}\n" + 
+				"\n" + 
+				"++s;\n" + 
+				"\n" + 
+				"g += 1+3;\n";
 
 		L_grammar lexer = new L_grammar(CharStreams.fromString(input));
 		
@@ -78,7 +82,14 @@ public class TestParser {
 				"| | | Ident (\"y\", (20, 36), (20, 36) )\n" + 
 				"| | | Binary Op (\"-\", (20, 41), (20, 43) )\n" + 
 				"| | | | Expression (\"x\", (20, 41), (20, 41) )\n" + 
-				"| | | | Expression (\"34\", (20, 43), (20, 43) )\n";
+				"| | | | Expression (\"34\", (20, 43), (20, 43) )\n" + 
+				"| Increment (\"++\", (22, 0), (22, 3) )\n" + 
+				"| | Ident (\"s\", (22, 2), (22, 2) )\n" + 
+				"| Plus Eq (\"+=\", (24, 0), (24, 8) )\n" + 
+				"| | Ident (\"g\", (24, 0), (24, 0) )\n" + 
+				"| | Binary Op (\"+\", (24, 5), (24, 7) )\n" + 
+				"| | | Expression (\"1\", (24, 5), (24, 5) )\n" + 
+				"| | | Expression (\"3\", (24, 7), (24, 7) )\n";
 
 		String res = new String(out.toByteArray());
 		//assert etalon.equals(res) : etalon + "\n" + res;
