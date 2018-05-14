@@ -86,14 +86,14 @@
 Я добавил операторы
 
 ```
-++Ident;
+++Ident; $\Leftrightarrow$ Ident = Ident + 1;
 ```
 ```
---Ident;
+--Ident; $\Leftrightarrow$ Ident = Ident - 1;
 ```
 ```
-Ident += Expression;
+Ident += Expression; $\Leftrightarrow$ Ident = Ident + Expression;
 ```
 ```
-Ident -= Expression;
+Ident -= Expression; $\Leftrightarrow$ Ident = Ident - Expression;
 ```

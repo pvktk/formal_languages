@@ -1,7 +1,6 @@
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.*;
 import java.io.*;
 import java.util.*;
 
@@ -35,6 +34,22 @@ public class ASTBuildListener extends L_parserBaseListener {
 			i.getCharPositionInLine(),
 			k.getLine(),
 			k.getCharPositionInLine()
+		);
+	}
+	
+	private void printInformation(String name, String textLex) {
+		
+		for (int j = 0; j < margin; j++) {
+			out.format("| ");
+		}
+		//String text = i.getText();
+		if (textLex.equals("<EOF>")) {
+			textLex = "";
+		}
+		out.format("%s (\"%s\")\n",
+			//voc.getSymbolicName(i.getType()),
+			name,
+			textLex
 		);
 	}
 	
@@ -102,6 +117,20 @@ public class ASTBuildListener extends L_parserBaseListener {
 		margin--;
 	}
 	
+	@Override public void enterBraceOp(L_parser.BraceOpContext ctx) {
+		margin++;
+		printInformation(ctx, "Block", "");
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBraceOp(L_parser.BraceOpContext ctx) {
+		margin--;
+	}
+	
+	
 	@Override public void enterNamedIdent(L_parser.NamedIdentContext ctx) {
 		margin++;
 		printInformation(ctx, "Ident");
@@ -151,13 +180,20 @@ public class ASTBuildListener extends L_parserBaseListener {
 	
 	@Override public void enterIncrement(L_parser.IncrementContext ctx) {
 		margin++;
-		printInformation(ctx, "Increment", "++");
+		printInformation("Operator", ":=");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Binary Op", "+");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Expression", "1");
+		margin -= 2;
+		
+		ctx.children= null;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void exitIncrement(L_parser.IncrementContext ctx) {
 		margin--;
 	}
@@ -165,47 +201,60 @@ public class ASTBuildListener extends L_parserBaseListener {
 	
 	@Override public void enterDecrement(L_parser.DecrementContext ctx) {
 		margin++;
-		printInformation(ctx, "Decrement", "--");
+		printInformation("Operator", ":=");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Binary Op", "-");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Expression", "1");
+		margin -= 2;
+		ctx.children= null;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void exitDecrement(L_parser.DecrementContext ctx) {
 		margin--;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void enterPlusEq(L_parser.PlusEqContext ctx) {
 		margin++;
-		printInformation(ctx, "Plus Eq", "+=");
+		printInformation("Operator", ":=");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Binary Op", "+");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		margin--;
+		ParseTreeWalker.DEFAULT.walk(this, ctx.getRuleContext(ParserRuleContext.class, 1));
+		margin -= 1;
+		ctx.children= null;
+		
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void exitPlusEq(L_parser.PlusEqContext ctx) {
 		margin--;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void enterMinusEq(L_parser.MinusEqContext ctx) {
 		margin++;
-		printInformation(ctx, "Minus Eq", "-=");
+		printInformation("Operator", ":=");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		printInformation("Binary Op", "-");
+		
+		margin++;
+		printInformation(ctx.getRuleContext(ParserRuleContext.class, 0), "Ident");
+		margin--;
+		ParseTreeWalker.DEFAULT.walk(this, ctx.getRuleContext(ParserRuleContext.class, 1));
+		margin -= 1;
+		ctx.children= null;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
 	@Override public void exitMinusEq(L_parser.MinusEqContext ctx) {
 		margin--;
 	}
